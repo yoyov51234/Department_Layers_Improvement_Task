@@ -45,11 +45,13 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public Department updateDepartment(int departmentId, Department newDepartment) {
-        return null;
+        return departmentDao.updateDepartment(departmentId, newDepartment);
     }
 
     @Override
     public Department updateDepartmentLocation(int departmentId, String newLocation) {
-        return null;
+        Department department = getById(departmentId);
+        department.setLocation(newLocation);
+       return updateDepartment(departmentId, department);
     }
 }

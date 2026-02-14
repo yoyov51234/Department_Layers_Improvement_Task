@@ -79,6 +79,20 @@ public class DepartmentDaoImpl implements DepartmentDao {
 
     @Override
     public Department updateDepartment(int departmentId, Department newDepartment) {
-        return null;
+       Transaction transaction = null;
+       try (Session session = sessionFactory.openSession()) {
+           transaction = session.beginTransaction();
+           Department department = session.get(Department.class, departmentId);
+           department.setName(newDepartment.getName());
+           department.setLocation(newDepartment.getLocation());
+           session.merge(department);
+           transaction.commit();
+           return department;
+       } catch (Exception e) {
+           if (transaction != null) {
+               transaction.rollback();
+           }
+           throw new RuntimeException("Can't update Department by ID " + departmentId, e);
+       }
     }
 }
